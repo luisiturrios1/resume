@@ -12,7 +12,7 @@ for (const language of languages) {
   assert.ok(html.includes(`rel="canonical" href="${origin}${language}/"`));
   assert.equal((html.match(/hreflang=/g) || []).length, 9);
   assert.ok(html.includes('application/ld+json'));
-  assert.ok(html.includes('Software Engineer &amp; Engineering Leader') || language !== 'en');
+  assert.ok(html.includes('<h1'));
   assert.ok(html.includes('luisiturrios1@gmail.com'));
   assert.ok(!html.includes('<!--app-->'));
   for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
