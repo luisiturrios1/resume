@@ -1,0 +1,26 @@
+{
+  "checkedOn": "2026-10-05",
+  "appStore": {
+    "url": "https://apps.apple.com/mx/app/desierto-de-altar-gps/id6788148149",
+    "rating": "5.0",
+    "ratings": 61,
+    "region": "MX"
+  },
+  "googlePlay": {
+    "url": "https://play.google.com/store/apps/details?id=com.iturriosdev.desiertodealtar&hl=es_MX&gl=MX",
+    "rating": "5.0",
+    "reviews": 64,
+    "downloads": "500+",
+    "region": "MX",
+    "scope": "Store header; phone-only section shows 57 reviews"
+  },
+  "analytics": {
+    "activeUsersRounded": "≈1.2k",
+    "activeUsersWindowDays": 30,
+    "windowEnd": "2026-10-04",
+    "engagement": "9m 51s",
+    "engagementStart": "2026-09-07",
+    "engagementEnd": "2026-10-04",
+    "source": "Google Analytics: desierto-de-altar-gps, Firebase overview, All Users"
+  }
+}

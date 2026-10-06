@@ -1,0 +1,13 @@
+[
+  {
+    "id": "cfdiclient",
+    "name": "python-cfdiclient",
+    "repository": "https://github.com/luisiturrios1/python-cfdiclient",
+    "description": "pythonDescription",
+    "stars": 139,
+    "release": "v1.6.3",
+    "language": "Python",
+    "license": "GPL-3.0",
+    "fetchedAt": "2026-10-06T01:06:06.267Z"
+  }
+]
