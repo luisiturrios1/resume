@@ -1,76 +1,104 @@
 import type { Translate } from '../i18n';
 import type { Locale } from '../utils/preferences';
+import type { Experience as ExperienceRecord } from '../data/types';
 import { experiences } from '../data/profile';
 import { SectionHeading } from '../components/SectionHeading';
-export function Experience({ t, locale }: { t: Translate; locale: Locale }) {
+
+function Period({ entry, locale, t }: { entry: ExperienceRecord; locale: Locale; t: Translate }) {
+  const date = (year: number, month = 1) =>
+    Intl.DateTimeFormat(locale, { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
+      new Date(Date.UTC(year, month - 1, 1)),
+    );
   return (
-    <section className="section experience-section" id="experience" aria-label={t('experience')}>
+    <span className="job-period">
+      <time dateTime={`${entry.year}-${String(entry.startMonth ?? 1).padStart(2, '0')}`}>
+        {date(entry.year, entry.startMonth)}
+      </time>{' '}
+      —{' '}
+      {entry.current ? (
+        t('present')
+      ) : entry.endYear ? (
+        <time dateTime={`${entry.endYear}-${String(entry.endMonth ?? 1).padStart(2, '0')}`}>
+          {date(entry.endYear, entry.endMonth)}
+        </time>
+      ) : (
+        ''
+      )}
+    </span>
+  );
+}
+export function Experience({ t, locale }: { t: Translate; locale: Locale }) {
+  const aloi = experiences[0];
+  const kueski = experiences.filter((entry) => entry.employer === 'Kueski');
+  const earlier = experiences
+    .filter((entry) => entry.employer !== 'Kueski' && entry.id !== 'aloi')
+    .sort((a, b) => b.year - a.year);
+  return (
+    <section
+      className="section experience-section"
+      id="experience"
+      aria-label={t('experience')}
+      lang={locale}
+    >
       <SectionHeading
-        number="02"
+        number="04"
         label={t('experience')}
         title={t('experienceIntro')}
         description={t('experienceDescription')}
       />
-      <div className="experience-grid">
-        <aside className="scale-card">
-          <p className="eyebrow">
-            <span className="status-dot" />
-            {t('scaleLabel')}
-          </p>
-          <div className="scale-numbers">
-            <span>50</span>
-            <span className="scale-arrow" aria-hidden="true">
-              ↗
+      <div className="career-row">
+        <span className="career-year">2025—</span>
+        <div>
+          <div className="career-heading">
+            <h3>{aloi.employer}</h3>
+            <span className="current-label">
+              <span className="status-dot" />
+              {t('present')}
             </span>
-            <strong>350</strong>
           </div>
-          <p className="scale-unit">{t('requests')}</p>
-          <div className="scale-comparison" aria-hidden="true">
-            <span style={{ width: `${(50 / 350) * 100}%` }} />
-            <span />
-          </div>
-          <p className="scale-description">{t('scaleDescription')}</p>
-          <div className="tags">
-            <span>Kubernetes</span>
-            <span>Amazon EKS</span>
-          </div>
-        </aside>
-        <ol className="timeline">
-          {experiences.map((entry, index) => (
-            <li key={entry.id} className={index === 0 ? 'latest' : ''}>
-              <div className="timeline-year">
-                <span className="sr-only">{t('startYear')} </span>
-                {entry.year}
-                <span className="timeline-dot" />
-              </div>
-              <div className="timeline-content">
+          <h4>{t(aloi.role)}</h4>
+          <Period entry={aloi} t={t} locale={locale} />
+          {aloi.description && <p>{t(aloi.description)}</p>}
+        </div>
+      </div>
+      <div className="career-row kueski-career">
+        <span className="career-year">2021—2025</span>
+        <div>
+          <h3>Kueski</h3>
+          <p className="career-subtitle">{t('kueskiCareer')}</p>
+          <ol className="role-progression">
+            {kueski.map((entry) => (
+              <li key={entry.id}>
+                <h4>{t(entry.role)}</h4>
+                <Period entry={entry} t={t} locale={locale} />
+              </li>
+            ))}
+          </ol>
+          <p>{t('staffText')}</p>
+          <a href="#engineering" className="text-link">
+            {t('engineeringImpact')} ↗
+          </a>
+        </div>
+      </div>
+      <details className="earlier-career" open>
+        <summary>
+          {t('earlierExperience')}
+          <span aria-hidden="true">↓</span>
+        </summary>
+        <ol>
+          {earlier.map((entry) => (
+            <li key={entry.id}>
+              <span className="career-year">{entry.year}</span>
+              <div>
                 <h3>{entry.employer}</h3>
-                <p className="role">{t(entry.role)}</p>
-                {entry.startMonth && (
-                  <p className="job-period">
-                    <time dateTime={`${entry.year}-${String(entry.startMonth).padStart(2, '0')}`}>
-                      {Intl.DateTimeFormat(locale, {
-                        month: 'long',
-                        year: 'numeric',
-                        timeZone: 'UTC',
-                      }).format(new Date(Date.UTC(entry.year, entry.startMonth - 1, 1)))}
-                    </time>
-                    {entry.current && ` — ${t('present')}`}
-                  </p>
-                )}
-                {entry.description && <p className="job-description">{t(entry.description)}</p>}
-                {entry.technologies.length > 0 && (
-                  <ul className="job-technologies" aria-label={t('technology')}>
-                    {entry.technologies.map((tech) => (
-                      <li key={tech}>{tech}</li>
-                    ))}
-                  </ul>
-                )}
+                <h4>{t(entry.role)}</h4>
+                <Period entry={entry} t={t} locale={locale} />
+                {entry.description && <p>{t(entry.description)}</p>}
               </div>
             </li>
           ))}
         </ol>
-      </div>
+      </details>
     </section>
   );
 }

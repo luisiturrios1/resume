@@ -1,137 +1,96 @@
-# Luis Iturrios · Engineering portfolio
+# Luis Iturrios — The engineer behind the systems
 
-A restrained, multilingual portfolio for software engineering, platform engineering, and technical leadership. React, TypeScript, Vite, and Tailwind CSS. Static HTML for every language; no backend, runtime API calls, routing dependency, or tracking.
+An Engineering Editorial portfolio: software architecture, infrastructure, developer platforms, open-source tools, and real commercial products. React 19 + TypeScript + Vite, with static pre-rendering for GitHub Pages. No production server, runtime API dependency, tracking, or external font request.
 
-## Development
+## Site narrative
 
-Use Node **22.18 or newer** (Node 22 LTS is used in CI).
+1. **Introduction:** “I build across the stack.”
+2. **Selected work:** Desierto de Altar GPS, real app captures, 3,000 owner-reported MAU, actual store links, product ownership, and engineering decisions. Rifas México is a compact additional historical product.
+3. **Engineering impact:** Kueski's EC2/Jenkins → EKS/GitHub transformation, architectural ownership, developer autonomy, and a seven-part case study. AWS DMS is secondary.
+4. **Open source:** python-cfdiclient's SAT integration workflow, real library entry points, PyPI installation, maintenance practices, and a dated repository snapshot.
+5. **Experience:** updated chronology, grouped Kueski progression, and earlier work.
+6. **About:** engineering approach, education, and verified credentials.
+7. **Résumé:** the original English PDF plus complete translations in the seven other languages; downloads follow the selected language.
+8. **Contact:** email, GitHub, and LinkedIn.
+
+## Development and review
+
+Node **22.18+** is required; CI uses Node 22.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite. The first visit uses a saved language or the first supported browser language, otherwise English. An explicit language URL always takes precedence. English is the default static page and translation fallback.
+For a production preview matching the GitHub Pages project path:
+
+```sh
+BASE_PATH=/resume/ VITE_SITE_URL=https://luisiturrios1.github.io/resume/ npm run build
+BASE_PATH=/resume/ npm run check:pages
+BASE_PATH=/resume/ npm run preview -- --host 127.0.0.1
+# http://127.0.0.1:4173/resume/en/
+```
+
+For a root-path preview, omit `BASE_PATH` for both build and preview. The preview base must match the build base.
 
 ```sh
 npm run lint
 npm run typecheck
 npm test
 npm run format:check
-npm run build
-npm run check:pages
-npm run preview
+# Run after a production build; use the corresponding base URL:
+BASE_PATH=/resume/ PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173/resume/ npm run test:e2e
 ```
 
-`npm run build` discovers available résumé PDFs, checks TypeScript, builds the client, builds a temporary server-rendering entry, and writes static HTML for eight language directories. The `.ssr` directory is a local build intermediate: **only `dist` is deployed**. Server rendering happens during the build; there is no server in production.
+Install Chromium once with `npx playwright install chromium` if it is unavailable. Browser tests cover static language pages, responsive layouts, theme/language persistence, keyboard controls, no-JavaScript content, direct refreshes, internal navigation, PDF downloads, and axe WCAG AA scans for all eight languages in both themes. Automated accessibility results supplement visual and keyboard review; they do not establish full human conformance.
 
-Optional browser checks:
+## Architecture and interactions
+
+The existing stack was retained to preserve working deployment and localization. Vite builds the client and a temporary React SSR entry; `scripts/prerender.mjs` generates complete HTML for every route. Only `dist/` is deployed, never `.ssr/`.
+
+- `src/data/profile.ts`: typed professional history, product details, and education.
+- `src/data/narrative.ts`: product links/adoption, screenshot chapters, Kueski case structure, and SAT workflow.
+- `src/i18n/`: complete copy for all eight languages, using English as the reference. Type checking requires every dictionary to implement the full English key schema.
+- `src/sections/`: dedicated narrative sections, including `Engineering` and `Resume`.
+- `src/index.css`: dark/light tokens, responsive editorial grids, focus states, and reduced-motion behavior.
+- `public/images/product/`: actual Spanish app screenshots; no invented interfaces.
+
+A lightweight IntersectionObserver updates the sticky desktop phone as visitors scroll through product chapters. Native buttons also select screens. Mobile uses inline captures with no sticky animation. The Kueski comparison offers keyboard-accessible before/after focus and explanation while retaining both diagrams in the document. Native `details` exposes the full case studies without JavaScript. Supported browsers progressively animate heading reveals with CSS view timelines; reduced motion disables these effects. Native scrolling is preserved. No GSAP, animation bundle, or WebGL dependency is needed.
+
+Dark is the initial theme. The color button switches directly between light and dark on every click and retains the selection. Previously saved system preferences are respected until the visitor chooses an explicit theme; the button icon and label reflect the next visible theme. An explicit language URL takes precedence over saved/browser preferences. No-JavaScript visitors receive real HTML, working disclosures/downloads, and links to all eight languages.
+
+## SEO and static routes
+
+The build produces `en/`, `es/`, `de/`, `fr/`, `nl/`, `it/`, `ja/`, and `zh-CN/`, plus an English root and a true `404.html`. Each route has canonical/hreflang links, title/description, Open Graph/Twitter metadata, a real product social image, and Person JSON-LD. The build writes sitemap, robots, and `.nojekyll`. Direct navigation and refresh work under `/resume/`; no SPA fallback rewrite is required.
+
+## Deployment
+
+**This redesign is local-only and has not been pushed or deployed.** To publish after review, keep repository **Settings → Pages → Build and deployment → GitHub Actions** selected, then push approved changes to `main`/`master` or manually run **Deploy portfolio to GitHub Pages**.
+
+The existing workflow runs locked installation, lint, type checking, unit tests, the production build, and static-route verification; it uploads `dist` through the official Pages actions. It reads the base path/public URL from `configure-pages`, supporting project sites and custom domains. Browser tests are available locally and are not claimed as part of the deployment job.
+
+## Maintaining content
+
+See [CONTENT.md](CONTENT.md) for source priority, metric scope, factual conflicts, asset provenance, and retained owner-confirmed facts. See [docs/redesign.md](docs/redesign.md) for decisions and validation. Earlier notes remain in [docs/content-history.md](docs/content-history.md).
+
+The approved original remains at `public/resume/luis-iturrios-resume-en.pdf` unchanged. Seven complete translations live alongside it as `luis-iturrios-resume-<locale>.pdf`. Every download link uses the selected locale and an explicit matching filename. `prepare:content` discovers the files at build time; English remains the defensive fallback if an asset is ever removed.
+
+PDF content is maintained in `scripts/resume-content/`: English is the canonical transcription; all seven translations have the same section schema. The renderer uses localized role labels from the website dictionaries. Official certification titles, institutional names, and technology names retain their proper spelling. The translations preserve the original six employers, five Kueski role periods, 3,000 MAU, certifications, education, and contact links.
+
+To regenerate translations, install `reportlab` and `pypdf` in your Python environment, then run:
 
 ```sh
-npx playwright install chromium
-npm run test:e2e
+python3 scripts/generate-resumes.py
+python3 scripts/verify-resumes.py
+npm run prepare:content
 ```
 
-These verify all eight languages at mobile width, URL/SEO updates, persisted preferences, navigation, case studies, downloads, and wider layouts. Unit tests cover language precedence/detection, translation fallback, complete dictionaries, and résumé selection.
+On macOS the renderer uses Arial, Arial Bold, and Arial Unicode from the system font directory. On other platforms, supply a directory containing these fonts with `--font-dir`. It embeds and checks every glyph, writes two-page PDFs to `output/pdf/`, and copies them into `public/resume/`. The English PDF is never regenerated. Rendering is a maintenance operation; deployment does not require Python or these fonts. After changing copy, render and visually review every affected page before publishing.
 
-## GitHub Pages deployment
+Update typed records and English reference copy, then update all seven translations and affected PDFs together. Avoid inferring employment dates, product metrics, private infrastructure, or CI success. The legacy `app-metrics.json` remains historical evidence and is not displayed as current analytics. `npm run update:github` refreshes the cached public snapshot at maintenance time; no visitor-side API call is required.
 
-In repository **Settings → Pages → Build and deployment**, select **GitHub Actions**. Push to `main` or `master`, or run the **Deploy portfolio to GitHub Pages** workflow manually. No local build or deployment commands are required.
+## Current limitations
 
-The workflow installs locked dependencies, runs ESLint, strict TypeScript checking, and unit tests, builds, uploads `dist`, and deploys through GitHub’s official Pages actions. It reads the base path and public URL from `configure-pages`, supporting project repositories, user sites, and configured custom domains. No GitHub token is embedded in the client. Do not configure a second branch-based Pages deployment alongside this workflow.
-
-Expected project URL: `https://luisiturrios1.github.io/resume/`.
-
-To reproduce a project-site build locally:
-
-```sh
-BASE_PATH=/resume/ VITE_SITE_URL=https://luisiturrios1.github.io/resume/ npm run build
-BASE_PATH=/resume/ npm run preview
-# Open http://localhost:4173/resume/en/
-```
-
-Use `VITE_SITE_URL` with the actual absolute public URL if deploying elsewhere. The default is the URL above; `BASE_PATH` defaults to `/` for local development.
-
-### Clean language URLs without SPA routing
-
-The build produces `en/index.html`, `es/index.html`, `de/index.html`, `fr/index.html`, `nl/index.html`, `it/index.html`, `ja/index.html`, and `zh-CN/index.html`. GitHub Pages serves `/resume/en/`, etc., directly. Both bookmarks and refreshes work, and `/en` receives the host’s normal directory-slash redirect. Navigation within the portfolio uses section anchors; the language selector updates browser history and content without reloading. Back/forward restores the URL’s language.
-
-No hash-routing or redirect-to-index 404 workaround is needed. Unknown pages receive a real `404.html`. The root is pre-rendered English; browser preference detection applies there once JavaScript loads. With JavaScript disabled, the English root and every localized page remain readable, and case studies and résumé downloads still work.
-
-Every language has pre-rendered title/description, OpenGraph, canonical, hreflang (including English `x-default`), and Person JSON-LD. The build also writes `sitemap.xml`, `robots.txt`, and `.nojekyll`.
-
-## Content and translations
-
-```text
-src/
-  components/       Shared header, icons, résumé link, section heading
-  sections/         Hero, projects, experience, open source, about, contact
-  data/             Typed professional content, project records, repository snapshot
-  i18n/<language>/  common.json: complete UI and content dictionaries
-  hooks/            Language and system/manual theme preferences
-  utils/            Preference resolution, translation fallback, résumé URLs, SEO
-scripts/            PDF discovery, GitHub snapshot refresh, static pre-rendering
-public/             Résumé PDF, optimized project images, favicon
-```
-
-`src/data/types.ts` defines `Experience`, `Project`, `OpenSourceProject`, `Education`, and `SkillCategory`. Components use these records and translation keys instead of embedding professional copy in JSX. Technology, employer, product, and institution names remain proper nouns. Native-script fonts are available through system font stacks for Japanese and Simplified Chinese; no remote fonts are downloaded.
-
-The site’s source notes and content limitations are documented in [CONTENT.md](CONTENT.md).
-
-### Add a language
-
-1. Add its code and native name in `src/utils/preferences.ts`.
-2. Copy `src/i18n/en/common.json` into `src/i18n/<code>/common.json` and translate all values. Preserve keys and factual meaning.
-3. Import the dictionary and register it in `src/i18n/index.ts`. Missing or empty strings fall back to English.
-4. Add its OpenGraph locale in `src/utils/seo.ts` and its code to `scripts/prepare-content.mjs`. Include the language in browser tests.
-5. Run unit tests, build, and check the new route on mobile and desktop. The pre-renderer and hreflang list use the central locale list automatically.
-
-Language preference is persisted in local storage. An explicit URL beats persisted preference; unsupported regional variants fall back to supported base languages. Only Simplified Chinese (`zh-CN` / `zh-Hans`) is mapped to Chinese automatically; Traditional Chinese is not silently relabeled. Theme follows the operating system initially and can cycle through system, light, and dark using the header control. Preference storage failure does not prevent the site from working.
-
-### Update résumé PDFs
-
-Place approved PDFs at:
-
-```text
-public/resume/luis-iturrios-resume-en.pdf
-public/resume/luis-iturrios-resume-es.pdf
-```
-
-English is included, copied unchanged from the supplied English résumé. **No Spanish PDF was supplied and none was generated.** Spanish and all other languages currently download English. Add `luis-iturrios-resume-<language>.pdf` for any supported language; the next build discovers it and records it in `src/data/resumes.json`. If a localized PDF does not exist, the download falls back to English. If no PDFs exist, the component displays a translated pending state instead of a broken link.
-
-After adding a PDF, run `npm run prepare:content` for immediate development updates, or simply build. Keep the file itself under `public/`; `/public` is never part of the browser URL. The large original PDF is downloaded only on request, not loaded with the page.
-
-### Add professional experience
-
-Add a typed record to `experiences` in `src/data/profile.ts`, with a stable ID, employer, source-supported year, role/description translation keys, and supported technologies. Add each new text key to every dictionary. Do not infer end dates or assign global résumé skills to an employer without evidence. The timeline renders records in the specified order; newest first.
-
-Education and technology categories are in the same file. The technical profile also includes technologies verified in Desierto de Altar GPS; these do not change employer-specific experience lists. The current résumé provides start years only, so the timeline deliberately shows start years rather than invented date ranges. The managerial role is listed from 2024 without an inferred end date. Aloi is the newest role, with November 2025–present and current employment explicitly confirmed by the owner.
-
-### Add a project or case study
-
-Add a typed project record in `src/data/profile.ts`, the corresponding text in dictionaries, and optimized assets in `public/images/`. A product’s case-study sections live as heading/body translation keys on its record in `src/data/profile.ts`; the preview renders them automatically. Populate them with source-backed or owner-approved content rather than unsupported estimates. Extend the section with a reusable project template when adding another product. Use actual screenshots, retain attribution, and set dimensions and responsive sizes.
-
-For open-source repositories, add an `OpenSourceProject` record to `src/data/open-source.json`; the Open Source section renders all records automatically. Add the description translation key in every language. Fields unavailable from GitHub should be `null`, not estimated.
-
-### Refresh GitHub information
-
-```sh
-npm run update:github
-```
-
-This uses unauthenticated GitHub public API requests at maintenance time, saves real stars, latest release, language, license, and timestamp, and preserves existing data if a request fails. Review and commit the updated JSON to publish it. The UI labels the date as a **snapshot**, formatted for the selected language in the owner’s Mexico City timezone. No API request happens in a visitor’s browser or is required for builds/deployments, avoiding runtime rate-limit failures.
-
-Repository README/package metadata is the source for python-cfdiclient’s description. Snapshot metadata comes from GitHub, which may differ from an older local package checkout.
-
-## Accessibility and performance
-
-Semantic sections and headings, skip link, native keyboard-accessible language selection, disclosure controls, Escape-to-close mobile navigation, visible focus styles, system/manual theme support, and reduced-motion support. Content stays usable without JavaScript. There are no entrance animations, skill bars, carousels, analytics, remote fonts, backend services, or animation libraries.
-
-Project images use WebP, fixed intrinsic dimensions, responsive screenshot variants, and lazy loading. The first screen uses typography and a small CSS/SVG systems illustration. Translation handling is a small typed dictionary lookup. Main container widths are capped for ultrawide displays; layouts stack on mobile.
-
-## Remaining content work
-
-- Revisit the GPS case study when full store-build group validation and extended device checks are completed. The current source-backed study states these pending validations; see [source notes](docs/desierto-case-study-sources.md).
-- Supply the Spanish résumé PDF if desired.
-- Confirm any professional-history updates newer than the supplied résumé, and add end dates only if verified.
-- Have a native speaker review translated professional terminology before wider publication.
+- The product case study retains documented group/device validation caveats. This portfolio task did not rebuild or validate the mobile app.
+- The diagrams intentionally describe conceptual workflows.
+- The social image is a real product landscape asset, not a new fabricated product screenshot.

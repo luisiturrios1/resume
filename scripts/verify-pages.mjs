@@ -13,8 +13,32 @@ for (const language of languages) {
   assert.equal((html.match(/hreflang=/g) || []).length, 9);
   assert.ok(html.includes('application/ld+json'));
   assert.ok(html.includes('<h1'));
+  const dictionary = JSON.parse(readFileSync(`src/i18n/${language}/common.json`, 'utf8'));
+  assert.ok(
+    html.includes(`<main id="main" class="site-container" tabindex="-1" lang="${language}">`),
+  );
+  assert.ok(html.includes(`download="luis-iturrios-resume-${language}.pdf"`));
+  assert.ok(html.includes(`${base}resume/luis-iturrios-resume-${language}.pdf`));
+  const escaped = (value) =>
+    value
+      .replaceAll('&', '&amp;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#x27;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;');
+  assert.ok(
+    html.includes(escaped(dictionary.kueskiTitle)),
+    `${language}: untranslated engineering heading`,
+  );
   assert.ok(html.includes('luisiturrios1@gmail.com'));
   assert.ok(!html.includes('<!--app-->'));
+  const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+  assert.equal(new Set(ids).size, ids.length, `${language}: duplicate element IDs`);
+  for (const match of html.matchAll(/href="#([^"]+)"/g)) {
+    assert.ok(ids.includes(match[1]), `${language}: missing anchor target #${match[1]}`);
+  }
+  assert.ok(html.includes(`property="og:image" content="${origin}images/social.jpg"`));
+  assert.ok(existsSync('dist/images/social.jpg'));
   for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
     const url = match[1];
     if (url.startsWith('http') || url.startsWith('mailto:') || url.startsWith('#')) continue;

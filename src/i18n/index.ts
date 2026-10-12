@@ -8,7 +8,7 @@ import ja from './ja/common.json';
 import zh from './zh-CN/common.json';
 import { translation, type Locale } from '../utils/preferences';
 export type TranslationKey = keyof typeof en;
-export const dictionaries: Record<Locale, Partial<Record<TranslationKey, string>>> = {
+export const dictionaries: Record<Locale, Record<TranslationKey, string>> = {
   en,
   es,
   de,

@@ -26,3 +26,7 @@ dist-ssr
 .ssr
 playwright-report
 test-results
+
+# Generated résumé QA intermediates and delivery copies
+tmp/pdfs/
+output/pdf/

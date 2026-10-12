@@ -5,6 +5,9 @@ export interface Experience {
   year: number;
   startMonth?: number;
   current?: boolean;
+  endYear?: number;
+  endMonth?: number;
+  referenceUrl?: string;
   role: TranslationKey;
   description?: TranslationKey;
   technologies: string[];

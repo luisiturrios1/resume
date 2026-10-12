@@ -42,3 +42,27 @@ test('all supported language files have complete, nonempty translation schemas',
     );
   }
 });
+
+test('all eight locales have distinct, valid PDF assets and complete résumé copy', () => {
+  const manifest = JSON.parse(readFileSync('src/data/resumes.json'));
+  assert.deepEqual(Object.keys(manifest).sort(), [...locales].sort());
+  const english = JSON.parse(readFileSync('scripts/resume-content/en.json'));
+  for (const locale of locales) {
+    assert.equal(manifest[locale], `resume/luis-iturrios-resume-${locale}.pdf`);
+    assert.equal(readFileSync(`public/${manifest[locale]}`).subarray(0, 5).toString(), '%PDF-');
+    const content = JSON.parse(readFileSync(`scripts/resume-content/${locale}.json`));
+    assert.deepEqual(Object.keys(content).sort(), Object.keys(english).sort());
+    assert.ok(Object.values(content).every((value) => typeof value === 'string' && value.trim()));
+  }
+});
+test('long explanatory copy is translated from the English reference in every other locale', () => {
+  const english = JSON.parse(readFileSync('src/i18n/en/common.json'));
+  for (const locale of locales.filter((locale) => locale !== 'en')) {
+    const dictionary = JSON.parse(readFileSync(`src/i18n/${locale}/common.json`));
+    for (const [key, value] of Object.entries(english)) {
+      if (value.length > 70)
+        assert.notEqual(dictionary[key], value, `${locale}: untranslated ${key}`);
+    }
+    assert.ok(!('localizationNotice' in dictionary));
+  }
+});

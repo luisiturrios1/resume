@@ -13,7 +13,7 @@ export function Header({
   changeTheme,
 }: {
   locale: Locale;
-  theme: Theme;
+  theme: Exclude<Theme, 'system'>;
   t: Translate;
   changeLocale: (locale: Locale) => void;
   changeTheme: (theme: Theme) => void;
@@ -49,8 +49,21 @@ export function Header({
           id="navigation"
           aria-label={t('menu')}
         >
-          {(['experience', 'projects', 'openSource', 'about', 'contact'] as const).map((key) => (
-            <a key={key} href={`#${key}`} onClick={() => setOpen(false)}>
+          {(
+            [
+              'projects',
+              'engineeringImpact',
+              'openSource',
+              'experience',
+              'about',
+              'contact',
+            ] as const
+          ).map((key) => (
+            <a
+              key={key}
+              href={`#${key === 'engineeringImpact' ? 'engineering' : key}`}
+              onClick={() => setOpen(false)}
+            >
               {t(key)}
             </a>
           ))}
@@ -84,13 +97,11 @@ export function Header({
           </div>
           <button
             className="icon-button theme-control"
-            onClick={() =>
-              changeTheme(theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system')
-            }
-            aria-label={`${t('theme')}: ${t(theme)}`}
-            title={`${t('theme')}: ${t(theme)}`}
+            onClick={() => changeTheme(theme === 'dark' ? 'light' : 'dark')}
+            aria-label={`${t('theme')}: ${t(theme === 'dark' ? 'light' : 'dark')}`}
+            title={`${t('theme')}: ${t(theme === 'dark' ? 'light' : 'dark')}`}
           >
-            <Icon name={theme === 'dark' ? 'moon' : 'sun'} />
+            <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
           </button>
           <a className="icon-button header-social" href={profile.github} aria-label="GitHub">
             <Icon name="github" />

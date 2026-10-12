@@ -2,111 +2,70 @@ import type { Translate } from '../i18n';
 import type { Locale } from '../utils/preferences';
 import { Icon } from '../components/Icon';
 import { ResumeLink } from '../components/ResumeLink';
+import { profile } from '../data/profile';
+
 export function Hero({ t, locale }: { t: Translate; locale: Locale }) {
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <div className="hero-topline">
-        <span className="eyebrow">
-          <span className="tiny-cross" aria-hidden="true">
-            +
-          </span>{' '}
-          {t('role')}
+      <div className="hero-topline eyebrow">
+        <span>
+          <span className="status-dot" /> {t('heroIdentity')}
         </span>
-        <span className="hero-coordinate" aria-hidden="true">
-          Flutter · Swift · iOS
-        </span>
+        <span className="hero-edition">{t('portfolioEdition')}</span>
       </div>
-      <div className="hero-grid">
+      <div className="hero-heading">
+        <h1 id="hero-title">
+          {t('heroFirst')}
+          <br />
+          <span>{t('heroSecond')}</span>
+        </h1>
+        <div className="hero-symbol" aria-hidden="true">
+          <svg viewBox="0 0 200 200" fill="none">
+            <circle cx="100" cy="100" r="82" />
+            <ellipse cx="100" cy="100" rx="82" ry="32" transform="rotate(-35 100 100)" />
+            <ellipse cx="100" cy="100" rx="32" ry="82" transform="rotate(-35 100 100)" />
+            <path d="M100 6v188M6 100h188" />
+            <circle className="orbit-dot" cx="167" cy="53" r="6" />
+          </svg>
+          <span>{t('buildConnectEnable')}</span>
+        </div>
+      </div>
+      <div className="hero-bottom">
         <div className="hero-copy">
-          <p className="hero-name">Luis Iturrios</p>
-          <h1 id="hero-title">
-            {t('heroFirst')}
-            <br />
-            <span>{t('heroSecond')}</span>
-          </h1>
           <p className="hero-description">{t('heroDescription')}</p>
           <div className="hero-actions">
             <a href="#projects" className="button primary">
-              {t('viewWork')}
-              <Icon name="arrow" size={17} />
+              {t('viewWork')} <Icon name="arrow" />
             </a>
-            <ResumeLink t={t} locale={locale} />
+            <ResumeLink t={t} locale={locale} className="text-link" />
+            <a href={profile.github} className="text-link">
+              GitHub <Icon name="external" size={15} />
+            </a>
+            <a href="#contact" className="text-link">
+              {t('contact')} <Icon name="external" size={15} />
+            </a>
           </div>
         </div>
-        <div className="system-visual" role="img" aria-label={t('diagramLabel')}>
-          <div className="visual-top">
-            <span>{t('engineering')}</span>
-            <span aria-hidden="true">01 — 03</span>
-          </div>
-          <div className="stack-item stack-product">
-            <span className="stack-index">01</span>
-            <div>
-              <strong>{t('layerProduct')}</strong>
-              <span>Flutter · Dart · iOS · Android</span>
-            </div>
-            <Icon name="code" size={24} />
-          </div>
-          <div className="stack-connector" aria-hidden="true">
-            <span />
-            <span>↓</span>
-          </div>
-          <div className="stack-item stack-platform">
-            <span className="stack-index">02</span>
-            <div>
-              <strong>{t('layerPlatform')}</strong>
-              <span>Swift · ActivityKit · Kotlin</span>
-            </div>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              <path d="M3 5h7v6H3Zm11 8h7v6h-7ZM6 11v5h8M10 8h7v5" />
-            </svg>
-          </div>
-          <div className="stack-connector" aria-hidden="true">
-            <span />
-            <span>↓</span>
-          </div>
-          <div className="stack-item stack-infra">
-            <span className="stack-index">03</span>
-            <div>
-              <strong>{t('layerInfrastructure')}</strong>
-              <span>Firebase · AWS · CI/CD</span>
-            </div>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              <path d="m12 3 9 5-9 5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" />
-            </svg>
-          </div>
-          <div className="visual-bottom">
-            <span aria-hidden="true" className="visual-dots">
-              ● ● ●
-            </span>
-            <span>{t('heroNote')}</span>
-          </div>
-        </div>
+        <nav className="work-index" aria-label={t('heroIndex')}>
+          {(
+            [
+              ['01', 'projects', 'heroProduct'],
+              ['02', 'engineering', 'heroPlatform'],
+              ['03', 'openSource', 'heroSource'],
+            ] as const
+          ).map(([number, id, label]) => (
+            <a href={`#${id}`} key={id}>
+              <span>{number}</span>
+              {t(label)}
+              <Icon name="external" size={16} />
+            </a>
+          ))}
+        </nav>
       </div>
       <div className="hero-foot">
-        <span className="micro-label">{t('technology')}</span>
-        <div>
-          {['Flutter', 'Dart', 'Swift', 'ActivityKit', 'Mapbox', 'Firebase'].map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </div>
-        <a href="#projects" className="scroll-arrow" aria-label={t('viewWork')}>
-          ↓
+        <span>{t('heroLocation')}</span>
+        <a href="#projects">
+          {t('selectedWork')} <span aria-hidden="true">↓</span>
         </a>
       </div>
     </section>

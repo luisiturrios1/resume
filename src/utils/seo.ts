@@ -8,6 +8,7 @@ export function seo(locale: Locale) {
   const t = translator(locale);
   return {
     title: t('seoTitle'),
+    imageAlt: t('socialImageAlt'),
     description: t('seoDescription'),
     canonical: `${siteUrl}${locale}/`,
     ogLocale: {
@@ -26,9 +27,18 @@ export const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: profile.name,
-  jobTitle: 'Mobile Software Engineer · Flutter & Swift',
+  jobTitle: 'Software Engineer, Architect & Product Creator',
   url: siteUrl,
   sameAs: [profile.github, profile.linkedin],
+  knowsAbout: [
+    'Software architecture',
+    'Platform engineering',
+    'Cloud infrastructure',
+    'Backend development',
+    'Mobile applications',
+    'Open-source software',
+    'Applied AI',
+  ],
 };
 export function updateSeo(locale: Locale) {
   const data = seo(locale);
@@ -40,6 +50,10 @@ export function updateSeo(locale: Locale) {
     ['meta[property="og:description"]', data.description],
     ['meta[property="og:url"]', data.canonical],
     ['meta[property="og:locale"]', data.ogLocale],
+    ['meta[property="og:image:alt"]', data.imageAlt],
+    ['meta[name="twitter:image:alt"]', data.imageAlt],
+    ['meta[name="twitter:title"]', data.title],
+    ['meta[name="twitter:description"]', data.description],
   ])
     document.querySelector(selector)?.setAttribute('content', content);
   document.querySelector('link[rel="canonical"]')?.setAttribute('href', data.canonical);
@@ -48,5 +62,5 @@ const escape = (value: string) =>
   value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
 export function seoMarkup(locale: Locale) {
   const data = seo(locale);
-  return `<title>${escape(data.title)}</title><meta name="description" content="${escape(data.description)}"><meta property="og:type" content="website"><meta property="og:title" content="${escape(data.title)}"><meta property="og:description" content="${escape(data.description)}"><meta property="og:url" content="${data.canonical}"><meta property="og:locale" content="${data.ogLocale}"><meta property="og:site_name" content="Luis Iturrios"><link rel="canonical" href="${data.canonical}">${locales.map((l) => `<link rel="alternate" hreflang="${l}" href="${siteUrl}${l}/">`).join('')}<link rel="alternate" hreflang="x-default" href="${siteUrl}en/"><script type="application/ld+json">${JSON.stringify(person)}</script>`;
+  return `<title>${escape(data.title)}</title><meta name="description" content="${escape(data.description)}"><meta property="og:type" content="website"><meta property="og:title" content="${escape(data.title)}"><meta property="og:description" content="${escape(data.description)}"><meta property="og:url" content="${data.canonical}"><meta property="og:locale" content="${data.ogLocale}"><meta property="og:site_name" content="Luis Iturrios"><meta property="og:image" content="${siteUrl}images/social.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${escape(data.imageAlt)}"><meta name="twitter:image:alt" content="${escape(data.imageAlt)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escape(data.title)}"><meta name="twitter:description" content="${escape(data.description)}"><meta name="twitter:image" content="${siteUrl}images/social.jpg"><link rel="canonical" href="${data.canonical}">${locales.map((l) => `<link rel="alternate" hreflang="${l}" href="${siteUrl}${l}/">`).join('')}<link rel="alternate" hreflang="x-default" href="${siteUrl}en/"><script type="application/ld+json">${JSON.stringify(person)}</script>`;
 }

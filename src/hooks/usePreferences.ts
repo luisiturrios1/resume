@@ -9,7 +9,8 @@ import {
 export type Theme = 'system' | 'light' | 'dark';
 export function usePreferences(initialLocale: Locale) {
   const [locale, setLocale] = useState(initialLocale);
-  const [theme, setTheme] = useState<Theme>('system');
+  const [theme, setTheme] = useState<Theme>('dark');
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('dark');
   useEffect(() => {
     const selected = resolveLocale(
       location.pathname,
@@ -22,7 +23,8 @@ export function usePreferences(initialLocale: Locale) {
     if (!pathLocale(location.pathname, import.meta.env.BASE_URL))
       history.replaceState(null, '', `${import.meta.env.BASE_URL}${selected}/${location.hash}`);
     const savedTheme = readPreference('portfolio-theme');
-    if (savedTheme === 'light' || savedTheme === 'dark') setTheme(savedTheme);
+    if (savedTheme === 'light' || savedTheme === 'dark' || savedTheme === 'system')
+      setTheme(savedTheme);
     const popstate = () => {
       setLocale(pathLocale(location.pathname, import.meta.env.BASE_URL) ?? 'en');
     };
@@ -32,8 +34,9 @@ export function usePreferences(initialLocale: Locale) {
   useEffect(() => {
     const media = matchMedia('(prefers-color-scheme: dark)');
     const apply = () => {
-      document.documentElement.dataset.theme =
-        theme === 'system' ? (media.matches ? 'dark' : 'light') : theme;
+      const visibleTheme = theme === 'system' ? (media.matches ? 'dark' : 'light') : theme;
+      document.documentElement.dataset.theme = visibleTheme;
+      setResolvedTheme(visibleTheme);
     };
     apply();
     media.addEventListener('change', apply);
@@ -48,5 +51,5 @@ export function usePreferences(initialLocale: Locale) {
     setTheme(next);
     savePreference('portfolio-theme', next);
   };
-  return { locale, theme, changeLocale, changeTheme };
+  return { locale, resolvedTheme, changeLocale, changeTheme };
 }

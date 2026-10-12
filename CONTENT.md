@@ -1,67 +1,61 @@
-# Content provenance
+# Content provenance — October 12, 2026
 
-## Professional history
+## Source priority
 
-Source: **Resume Luis J Iturrios-2.pdf**, supplied from the owner’s Downloads directory. The English downloadable PDF is an unchanged copy. The source is one page and was read as text and visually reviewed.
+1. The owner's redesign brief: the Kueski architectural ownership and self-service transformation; multidisciplinary positioning; confirmation of 3,000 MAU and store sales.
+2. `/Users/luisiturrios/Repos/linkedin/output/pdf/Luis_Iturrios_Resume_Clara_Staff_DevOps.pdf`: primary professional history, dates, education, certifications, product adoption, and contact. `public/resume/luis-iturrios-resume-en.pdf` is a byte-for-byte copy.
+3. The six files in `/Users/luisiturrios/Repos/linkedin`: the editable résumé, profile extraction, own LinkedIn activity, interests, and preparation notes. Interests were reviewed as context; private profile metrics, unrelated personal posts, and third-party recommendations are not published.
+4. Public python-cfdiclient README and PyPI metadata; local package and workflow files. Product documentation and real assets in the sibling Desierto de Altar repository.
+5. Existing owner-confirmed website content, including uncommitted material present at the start. Historical notes are preserved in [content-history.md](docs/content-history.md).
 
-- Kueski: DevOps Engineering Manager (2024); DevOps Tech Lead (2021).
-- KIO Networks: Product Developer (2019).
-- SAT: Inter-institutional coordination manager (2018).
-- OOMAPASSLRC: Software Developer, water resource planning (2017).
-- SAIT: Software Developer, invoice-signing service migration PHP → Go and CFDI product development (2014).
-- Education: ICT engineering, Universidad Tecnológica de San Luis Río Colorado (2016); SCRUM Master certification, International Scrum Institute (2015); SDP07 HCI & Communication, Carnegie Mellon University (2013).
-- Email: luisiturrios1@gmail.com. Location: San Luis Río Colorado, Mexico.
+The public LinkedIn page could not be retrieved (HTTP 999), so the owner's dated local extraction supplies chronology. The existing portfolio, GitHub profile/repository, and PyPI page were inspected. The GitHub profile's older DevOps headline does not override the updated résumé or the owner’s brief. The product's public website was unavailable to the web reader; its local source and store URLs were available.
 
-The Kueski scaling evidence is supported both by the résumé and the owner’s prompt: approximately 50 → 350 requests per second after work on Kubernetes/EKS scalability. The two comparison bars correspond to these two endpoints only; there are no invented intermediate measurements or time series.
+## Kueski
 
-The source prints role start years, not end dates. No tenure ranges, years-of-experience total, or claim about current employment has been extrapolated. Role-specific technology lists follow the résumé’s right-hand experience column. Global skill lists are separate. TypeScript appears in the hero because it was explicitly requested by the owner; it is not attributed to an employer or added to the résumé-derived technical profile.
+The brief explicitly confirms that Luis designed the target architecture and led implementation, moving from EC2/Jenkins toward EKS/GitHub workflows and developer self-service. It also confirms business expansion, including Amazon partnerships. The seven-part story preserves these facts. Existing owner-confirmed Staff Engineering content separately supports API definition, idempotency, and coordination for Amazon merchant integration.
 
-## python-cfdiclient
+The diagram shows a **conceptual workflow**, not internal infrastructure. It contains no inferred topology, confidential service names, team sizes, rollout dates, performance improvements, deployment frequencies, or revenue. AWS DMS appears as a secondary achievement, supported by the résumé and the owner's LinkedIn post. The former 50→350 RPS visual was removed from the page.
 
-Sources:
-
-- Local sibling repository `../python-cfdiclient/README.md` and `pyproject.toml`.
-- [Public repository README](https://github.com/luisiturrios1/python-cfdiclient#readme).
-- [GitHub repository API](https://api.github.com/repos/luisiturrios1/python-cfdiclient).
-- [Latest GitHub release API](https://api.github.com/repos/luisiturrios1/python-cfdiclient/releases/latest).
-
-The conservative description follows the documented SAT authentication, bulk download requests, request verification, and package retrieval workflow. Maintainer status was explicitly provided by the owner. Stars, latest release, language, and license are recorded with a fetch timestamp, not hardcoded estimates; see `src/data/open-source.json`. The displayed license is GitHub’s identifier. Package metadata identifies GPL-3.0-only.
+The five Kueski role periods and Aloi's November 2025–present period follow the updated PDF. Earlier roles follow that source; OOMAPASSLRC remains as additional owner-confirmed historical experience. Responsibilities retained from prior owner interviews are not presented as text extracted from the new PDF.
 
 ## Desierto de Altar GPS
 
-Product URL supplied by the owner: [Desierto de Altar GPS](https://desierto-de-altar-gps.web.app).
+The updated PDF and brief agree on **3,000 monthly active users** and real sales in both stores. The displayed figure is labelled owner-reported, dated to the October 2026 résumé; it is not a live analytics reading. Historical 1.2K analytics/store rating snapshots remain in `src/data/app-metrics.json` for provenance but are not used as current product metrics. Older preparation notes mentioning “3 users” are superseded by the updated PDF and explicit brief.
 
-Additional verified material: local sibling repository `../desierto_de_altar/landing/index.html`, `landing/README.md`, and `landing/assets/captures.json`. These support maps, GPS routes, points of interest, and offline maps.
+Feature statements: offline maps, GPS route recording, POIs, GPX/KML import, GPX export, temporary sharing groups, and free/lifetime Pro tiers. Live sharing requires connectivity. The existing source review's extended device/store-build group-validation caveat is retained; no public release of CarPlay/Android Auto is claimed.
 
-Images copied from the product’s own landing assets:
+Implementation details are grounded in the existing [source review](docs/desierto-case-study-sources.md) and sibling documentation. Flutter/Dart, Mapbox, Drift/SQLite, Firebase, RevenueCat, native bridges, and testing practices are supported by actual project files. Owner-confirmed AI/spec-driven development, store review, and lifecycle ownership are retained. Source presence does not establish a fresh native build or current passing mobile tests; this task tests the portfolio only.
 
-- `landing/assets/dunes.webp` → `public/images/desert.webp`.
-- `landing/assets/screens/map-medium.webp` → `public/images/app-map.webp`.
-- `landing/assets/screens/map-small.webp` → `public/images/app-map-small.webp`.
+### Assets
 
-The source capture manifest identifies an actual iOS Simulator capture on September 30, 2026, not a reconstructed interface. The screenshot is displayed in full with original attribution retained. The desert photo is a product asset, not a generic stock replacement. Copies are optimized WebP variants already provided by the product repository.
+Copied from `/Users/luisiturrios/Repos/desierto_de_altar/firebase/hosting/src/assets/`:
 
-The owner authorized a review of the product repository to complete the case study. Problem, solution, architecture, challenges, technology, engineering practices, and design takeaways now derive from inspected implementation and documentation. No audience counts, download counts, growth statistics, or measured engineering outcomes are invented. See [the source-to-content review](docs/desierto-case-study-sources.md) for exact files, interpretations, and pending validations.
+- `screens/{map,downloads,route,poi}-medium.webp` → `public/images/product/`: real Spanish app captures, displayed without fabricated overlays or recreated UI. Each capture is 604×1313.
+- `social.jpg` → `public/images/social.jpg`: real product landscape asset, 1200×630, used for social metadata.
+- Existing `public/images/desert.webp` is the same product's desert landscape.
 
-## Additional owner-provided certification
+Product links come directly from the updated résumé:
 
-AWS Certified Solutions Architect was explicitly supplied by the owner in chat. The official certification name is retained across all languages. The owner confirmed the award year as 2024. No level (Associate or Professional), expiration, or credential ID was provided; none is inferred. The original downloadable résumé PDF remains unchanged.
+- [Website](https://desierto-de-altar-gps.web.app)
+- [App Store](https://apps.apple.com/app/id6788148149)
+- [Google Play](https://play.google.com/store/apps/details?id=com.iturriosdev.desiertodealtar)
 
-## Additional owner-provided experience
+Rifas México is retained as an owner-confirmed prior product built, operated, and sold. The link points to its current publisher. No present-day adoption, ratings, sale amount, or profitable exit is attributed to Luis.
 
-The owner supplied **Founding Software Engineer at Aloi, November 2025–present** and confirmed current employment. This is the newest timeline entry. No responsibilities, achievements, stack, employer website, or end dates for other roles were supplied or inferred. The LinkedIn URL provided is a private profile-edit URL, so it is not published as a public company or role link.
+## python-cfdiclient
 
-## Mobile hiring positioning and product metrics — October 5, 2026
+[Repository](https://github.com/luisiturrios1/python-cfdiclient) and [PyPI](https://pypi.org/project/cfdiclient/) support e.firma/FIEL authentication, bulk CFDI/metadata requests, asynchronous request verification, ZIP package downloads, and invoice status checks. The installed distribution is `cfdiclient`, not `python-cfdiclient`. GPL-3.0-only comes from `pyproject.toml`.
 
-The owner confirmed Flutter and Swift as the mobile positioning. Public copy intentionally omits job-search geography, relocation plans, visa requirements, and language proficiency claims. Existing employer titles and dates are preserved. The mobile positioning is applied across all eight languages; Swift evidence is explicitly native integration within a Flutter product, including `ios/Runner/RouteLiveActivityBridge.swift` and ActivityKit.
+The package/workflow sources support multi-version/cross-platform testing, automated releases, semantic versioning, CodeQL, and dependency review. Their existence is described; current CI success is not inferred. The website uses the existing timestamped repository snapshot (139 stars), without runtime GitHub requests. The code preview lists real public entry points; it links to the README for the complete authenticated flow and does not imply that the import block downloads invoices by itself.
 
-Verified through the signed-in browser and public store listings on October 5, 2026:
+## Education and credentials
 
-- Owner-provided link https://webhangar.net/app/3ut3CFEq resolves to the same two store listings recorded in `src/data/app-metrics.json`.
-- App Store Mexico: 5.0/5, 61 ratings. These are ratings, not 61 written reviews.
-- Google Play Mexico: header 5.0/5, 64 reviews, 500+ downloads. Phone-filtered ratings section shows 57 reviews; use the explicitly labelled store-header scope, not an aggregated or inferred total across platforms.
-- GA4 property `desierto-de-altar-gps`, Firebase overview, All Users: user activity card shows 1.2K for its 30-day window ending October 4, 2026. Preserve the approximation and 30-day window, distinct from the overall report's September 7–October 4 range.
-- Average engagement time per active user is 9m 51s for September 7–October 4, 2026. This is not average session duration.
-- Store download threshold is Android-only, not total installs or active users. No cross-store rating average is calculated.
+The primary PDF names Universidad Tecnológica Metropolitana de San Luis Potosí, 2012–2016. That name takes precedence over the different institution in an older résumé and LinkedIn header; the discrepancy is documented rather than silently treated as a second degree.
 
-Metrics are dated snapshots, not live integrations. Analytics source requires owner access; public store links are provided on the site. No credentials or private analytics URLs are published. The original downloadable résumé remains unchanged and reflects the prior broader engineering positioning.
+AWS Solutions Architect **Associate**: June 2024–June 2027, with the supplied public Credly credential. The new PDF does not provide dates for SCRUM or HCI certificates; the website no longer displays inferred 2015/2013 dates.
+
+## Localization
+
+At the owner’s request, English is the reference for all eight complete experiences: English, Spanish, German, French, Dutch, Italian, Japanese, and Simplified Chinese. The editorial fallback was removed. Stories, navigation, accessibility labels, dates/numbers, résumé descriptions, and social metadata follow the selected language. Product captures retain the real Spanish interface and are labelled accordingly.
+
+The original English PDF remains byte-for-byte unchanged. Seven two-page translated PDFs were created from its editable English source, without adding website-only experience or altering facts. `scripts/resume-content/en.json` records that canonical text; each translated file implements the same schema. The renderer embeds Latin/CJK fonts and sets the PDF language. Official qualification names and institutions remain proper names. Download links, filenames, and the build manifest select the corresponding language even without JavaScript. `scripts/verify-resumes.py` checks full translated content, employment and certification date ranges, source links, and the original English checksum.

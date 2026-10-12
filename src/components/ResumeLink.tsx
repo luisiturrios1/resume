@@ -13,7 +13,12 @@ export function ResumeLink({
 }) {
   const url = resumeUrl(locale, files, import.meta.env.BASE_URL);
   return url ? (
-    <a href={url} download className={className}>
+    <a
+      href={url}
+      hrefLang={locale}
+      download={`luis-iturrios-resume-${locale}.pdf`}
+      className={className}
+    >
       {t('download')}
       <Icon name="download" size={16} />
     </a>
